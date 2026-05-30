@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plant-illness-api"
+version = "0.1.0"
+description = "API de inferencia para Plant illness regression"
+authors = [{name = "Equipo", email = "you@example.com"}]
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+dependencies = [
+  "fastapi>=0.95",
+  "uvicorn[standard]>=0.20",
+  "python-multipart>=0.0.6",
+  "pillow>=10.0",
+  "numpy>=1.25",
+  "pandas>=2.2",
+]

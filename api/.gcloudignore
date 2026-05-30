@@ -1,0 +1,12 @@
+# This file specifies files that are *not* uploaded to Google Cloud Platform
+.gcloudignore
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.egg-info
+dist
+build

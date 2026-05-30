@@ -1,0 +1,19 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.python-version
+
+# Virtual environments
+.venv
+
+# Project
+PROJECT.MD
+data/
+*.ipynb
+.env
+firebase-adminsdk.json
+*.log
