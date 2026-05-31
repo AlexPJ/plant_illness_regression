@@ -10,7 +10,7 @@
       {
         "source": "/api/**",
         "run": {
-          "serviceId": "https://plant-illness-regression-714954027267.europe-west1.run.app",
+          "serviceId": "https://plant-illness-regression-predict-338441810170.europe-west1.run.app",
           "region": "europe-west1" 
         }
       },
