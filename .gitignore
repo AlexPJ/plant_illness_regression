@@ -18,3 +18,4 @@ data/
 firebase-adminsdk.json
 *.log
 *.cache
+.env.*
