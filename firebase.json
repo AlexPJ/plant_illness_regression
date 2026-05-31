@@ -10,7 +10,7 @@
       {
         "source": "/api/**",
         "run": {
-          "serviceId": "https://plant-illness-regression-338441810170.us-central1.run.app",
+          "serviceId": "plant-illness-regression",
           "region": "us-central1" 
         }
       },
