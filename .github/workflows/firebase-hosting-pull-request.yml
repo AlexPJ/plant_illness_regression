@@ -3,6 +3,8 @@
 
 name: Deploy to Firebase Hosting on PR
 on: pull_request
+env:
+  VITE_API_URL: ${{ vars.VITE_API_URL }}
 permissions:
   checks: write
   contents: read
