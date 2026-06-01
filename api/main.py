@@ -9,17 +9,22 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 import numpy as np
 from PIL import Image
-from utils import compact_features_from_pil, disease_highlight_from_pil
+from utils import compact_features_from_pil, disease_highlight_from_pil, predict_disease_rating_from_pil
 
-MODEL_PATH = os.environ.get("MODEL_PATH", "./model/notebook_feature_mlp_plant_model.npz")
+DEFAULT_MODEL = "./model/plant_disease_augmented_feature_model.npz"
+MODEL_PATH = os.environ.get("MODEL_PATH", DEFAULT_MODEL)
 REF_JSON = os.environ.get("REF_JSON", "./model/reference_features.json")
 ALLOWED_ORIGIN = os.environ.get("ALLOWED_ORIGIN", "http://localhost:5173")
 MAX_UPLOAD_MB = float(os.environ.get("MAX_UPLOAD_MB", "6"))
 
 if not os.path.exists(MODEL_PATH):
     model_dir = os.path.dirname(MODEL_PATH) or "./model"
-    candidates = [f for f in os.listdir(model_dir) if f.endswith(".npz")]
-    if candidates:
+    candidates = sorted(f for f in os.listdir(model_dir) if f.endswith(".npz"))
+    preferred = [f for f in candidates if "augmented" in f]
+    if preferred:
+        MODEL_PATH = os.path.join(model_dir, preferred[0])
+        print(f"Warning: default model path not found. Falling back to {MODEL_PATH}")
+    elif candidates:
         MODEL_PATH = os.path.join(model_dir, candidates[0])
         print(f"Warning: default model path not found. Falling back to {MODEL_PATH}")
     else:
@@ -88,11 +93,6 @@ for parent_dir in ("../data", "./data", "data", "./model", "model"):
 def health():
     return {"status": "ok", "model_loaded": bool(model_params)}
 
-def _predict_from_features(x: np.ndarray) -> float:
-    h = np.maximum(x @ W1 + b1, 0)
-    pred = float((h @ W2 + b2).reshape(-1)[0] * 100.0)
-    return float(np.clip(pred, 0, 100))
-
 @app.post("/predict")
 async def predict(image: UploadFile = File(...)):
     if model_params is None or W1 is None:
@@ -112,8 +112,9 @@ async def predict(image: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Cannot open image")
 
     x_raw = compact_features_from_pil(img).reshape(1, -1)
-    x = (x_raw - feature_mean) / feature_std
-    pred = _predict_from_features(x)
+    pred = predict_disease_rating_from_pil(
+        img, W1, b1, W2, b2, feature_mean, feature_std, robust=True
+    )
 
     overlay_img, affected_mask = disease_highlight_from_pil(img)
     buf = io.BytesIO(); overlay_img.save(buf, format="PNG")

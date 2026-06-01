@@ -18,9 +18,10 @@ Build with Podman:
 
 ```bash
 podman build -t plant-illness-api:local -f api/Dockerfile api/
-podman run --rm -p 8080:8080 -e MODEL_PATH=/app/model/notebook_feature_mlp_plant_model.npz -e ALLOWED_ORIGIN=http://localhost:5173 plant-illness-api:local
+podman run --rm -p 8080:8080 -e MODEL_PATH=/app/model/plant_disease_augmented_feature_model.npz -e ALLOWED_ORIGIN=http://localhost:5173 plant-illness-api:local
 ```
 
 Notes:
-- Copy the trained model `.npz` file into `api/model/` as `notebook_feature_mlp_plant_model.npz`.
+- Copy `notebooks/plant_disease_augmented_feature_model.npz` into `api/model/` (default `MODEL_PATH`).
+- `/predict` uses robust inference (z-score clip + OOD fallback by lesion coverage), matching the notebook.
 - Add `reference_features.json` into `api/model/` for feature names and references used by `/predict`.
