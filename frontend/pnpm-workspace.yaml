@@ -6,3 +6,5 @@ minimumReleaseAge: 10080
 overrides:
   form-data@>=4.0.0 <4.0.6: '>=4.0.6'
   websocket-driver@<0.7.5: '>=0.7.5'
+  protobufjs@<7.6.5: '>=7.6.5'
+  '@babel/core@<7.29.1': '>=7.29.1'
