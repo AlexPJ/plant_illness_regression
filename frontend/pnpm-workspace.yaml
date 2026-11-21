@@ -8,3 +8,4 @@ overrides:
   websocket-driver@<0.7.5: '>=0.7.5'
   protobufjs@<7.6.5: '>=7.6.5'
   '@babel/core@<7.29.1': '>=7.29.1'
+  '@grpc/grpc-js': '>=1.13.6'
